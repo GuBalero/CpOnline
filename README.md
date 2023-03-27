@@ -131,40 +131,8 @@ Uma API para sistema de provas online.
 | 200 | dados do professor retornados com sucesso
 | 404 | não existe professor com o id informado
 
-----
+---
 
-### Listar todas provas por professor
-
-`GET` /cponline/api/prova/professor/{id}
-
-**Exemplo de Resposta**
-
-```js
-[
-    {
-        id: 54,
-        descricao: 'CP1 Matematica'
-    },
-    {
-        id: 102,
-        descricao: 'GS 1°SEM Python'
-    },
-    {
-        id: 2001,
-        descricao: 'CP2 Banco de Dados'
-    }
-]
-```
-**Códigos de Respostas**
-
-| código | descrição
-|-|-
-| 200 | dados das provas do professor retornados com sucesso
-| 404 | não existe professor com o id informado
-
-----
-
-----------------------------------------------------------------------
 ### Cadastrar Aluno
 
 `POST` /cponline/api/aluno
@@ -265,7 +233,7 @@ Uma API para sistema de provas online.
 | 200 | dados do aluno retornados com sucesso
 | 404 | não existe aluno com o id informado
 
-----------------------------------------------------------------------
+---
 
 ### Cadastrar Prova
 
@@ -345,6 +313,7 @@ Uma API para sistema de provas online.
 | 400 | campos inválidos
 | 404 | não existe prova com o id informado
 
+---
 
 ### Listar todas provas por professor
 
@@ -408,8 +377,6 @@ Uma API para sistema de provas online.
 
 ----
 
-----
-
 ### Mostrar detalhes do professor
 
 `GET` /cponline/api/prova/professor{id}
@@ -431,6 +398,7 @@ Uma API para sistema de provas online.
 | 200 | dados do prova/professor retornados com sucesso
 | 404 | não existe professor/prova com o id informado
 
+---
 
 ### Mostrar detalhes do aluno
 
@@ -454,15 +422,6 @@ Uma API para sistema de provas online.
 | 404 | não existe prova/aluno com o id informado
 
 ----
-
-private String enunciado;
-    private String alternativaA;
-    private String alternativaB;
-    private String alternativaC;
-    private String alternativaD;
-    private String alternativaE;
-    private String alternativaCorreta;
-
 
 ### Cadastrar Questões
 
@@ -505,7 +464,7 @@ private String enunciado;
 
 ----
 
-### Apagar questão
+### Apagar Questão
 
 `DELETE` /cponline/api/questao/{id}
 
@@ -518,7 +477,7 @@ private String enunciado;
 
 ----
 
-### Alterar Professor
+### Alterar Questão
 
 `PUT` /cponline/api/questao/{id}
 
