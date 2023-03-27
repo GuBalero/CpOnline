@@ -18,7 +18,7 @@ import br.com.fiap.cponline.models.Aluno;
 import br.com.fiap.cponline.repository.AlunoRepository;
 
 @RestController
-@RequestMapping("/api/Aluno/")
+@RequestMapping("/api/aluno/")
 public class AlunoController {
 
     Logger log = LoggerFactory.getLogger(AlunoController.class);

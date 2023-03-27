@@ -253,9 +253,9 @@ Uma API para sistema de provas online.
 ```js
 {
     descricao: 'Pova de Matemática',
-    url: 'www.fiap.com.br/prova de matematica',
+    urlAcesso: 'www.fiap.com.br/prova de matematica',
     data: '2023-03-23',
-    status: ativo
+    status: 'ativo'
 }
 ```
 
@@ -290,7 +290,7 @@ Uma API para sistema de provas online.
 | campo | tipo | obrigatório | descrição 
 |-------|------|:-------------:|---
 |descricao | string | sim | Descrição da prova
-|url | string | sim | url de acesso do aluno a prova
+|urlAcesso | string | sim | url de acesso do aluno a prova
 |data| Localdate | sim | Local e data de prova 
 |ativo | boolean | sim | Se a prova está ativa
 

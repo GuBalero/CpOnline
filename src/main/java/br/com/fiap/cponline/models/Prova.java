@@ -2,8 +2,16 @@ package br.com.fiap.cponline.models;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Prova {
-    
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String descricao;
     private String urlAcesso;
@@ -11,7 +19,7 @@ public class Prova {
     private boolean ativo;
 
     public Prova() {
-    
+
     }
 
     public Prova(int id, String descricao, String urlAcesso, LocalDate data, boolean ativo) {
@@ -68,5 +76,4 @@ public class Prova {
                 + ", ativo=" + ativo + "]";
     }
 
-    
 }

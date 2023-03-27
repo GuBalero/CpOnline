@@ -18,7 +18,7 @@ import br.com.fiap.cponline.models.Prova;
 import br.com.fiap.cponline.repository.ProvaRepository;
 
 @RestController
-@RequestMapping("/api/Prova/")
+@RequestMapping("/api/prova/")
 
 public class ProvaController {
 

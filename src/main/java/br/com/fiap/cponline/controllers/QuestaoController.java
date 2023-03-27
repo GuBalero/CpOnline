@@ -18,7 +18,7 @@ import br.com.fiap.cponline.models.Questao;
 import br.com.fiap.cponline.repository.QuestaoRepository;
 
 @RestController
-@RequestMapping("/api/Questao/")
+@RequestMapping("/api/questao/")
 
 public class QuestaoController {
     Logger log = LoggerFactory.getLogger(QuestaoController.class);
