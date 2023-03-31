@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Questao {
@@ -11,12 +13,26 @@ public class Questao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String enunciado;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String alternativaA;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String alternativaB;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String alternativaC;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String alternativaD;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String alternativaE;
+    @NotBlank
+    @Size(min = 1, max = 2000)
     private String alternativaCorreta;
 
     public Questao() {

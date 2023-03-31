@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.cponline.exceptions.RestNotFoundException;
 import br.com.fiap.cponline.models.Professor;
 import br.com.fiap.cponline.repository.ProfessorRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/professor/")
@@ -27,9 +29,10 @@ public class ProfessorController {
     ProfessorRepository repository;
 
     @PostMapping
-    public ResponseEntity<Professor> create(@RequestBody Professor professor) {
+    public ResponseEntity<Professor> create(@RequestBody @Valid Professor professor) {
+
         log.info("Cadastrando o Professor" + professor);
-        
+
         int idCadastrado = repository.save(professor).getId();
 
         professor.setId(idCadastrado);
@@ -41,39 +44,33 @@ public class ProfessorController {
     public ResponseEntity<Professor> show(@PathVariable int id) {
         log.info("buscar o Professor" + id);
 
-        var busca = repository.findById(id);
+        var professor = repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Professor não encontrado"));
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        return ResponseEntity.ok(busca.get());
+        return ResponseEntity.ok(professor);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Professor> destroy(@PathVariable int id) {
         log.info("buscar o Professor" + id);
 
-        var busca = repository.findById(id);
+        var professor = repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Professor não encontrado"));
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        repository.delete(busca.get());
+        repository.delete(professor);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Professor> update(@PathVariable int id, @RequestBody Professor professor) {
+    public ResponseEntity<Professor> update(@PathVariable int id, @RequestBody @Valid Professor professor) {
         log.info("Atualizando Professor" + id);
-        var busca = repository.findById(id);
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        repository.findById(id).orElseThrow(() -> new RestNotFoundException("Professor não encontrado"));
 
         professor.setId(id);
         repository.save(professor);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(professor);
+        return ResponseEntity.ok(professor);
     }
 }

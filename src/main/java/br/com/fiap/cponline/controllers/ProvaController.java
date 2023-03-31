@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.cponline.exceptions.RestNotFoundException;
 import br.com.fiap.cponline.models.Prova;
 import br.com.fiap.cponline.repository.ProvaRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/prova/")
@@ -28,7 +30,7 @@ public class ProvaController {
     ProvaRepository repository;
 
     @PostMapping
-    public ResponseEntity<Prova> create(@RequestBody Prova prova) {
+    public ResponseEntity<Prova> create(@RequestBody @Valid Prova prova) {
         log.info("Cadastrando a Prova" + prova);
 
         int idCadastrado = repository.save(prova).getId();
@@ -42,24 +44,20 @@ public class ProvaController {
     public ResponseEntity<Prova> show(@PathVariable int id) {
         log.info("buscar a Prova" + id);
 
-        var busca = repository.findById(id);
+        var prova = repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        return ResponseEntity.ok(busca.get());
+        return ResponseEntity.ok(prova);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Prova> destroy(@PathVariable int id) {
         log.info("buscar a Prova" + id);
 
-        var busca = repository.findById(id);
+        var prova = repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        repository.delete(busca.get());
+        repository.delete(prova);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -67,15 +65,13 @@ public class ProvaController {
     @PutMapping("{id}")
     public ResponseEntity<Prova> update(@PathVariable int id, @RequestBody Prova prova) {
         log.info("Atualizando Prova" + id);
-        var busca = repository.findById(id);
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        repository.findById(id).orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));
 
         prova.setId(id);
         repository.save(prova);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(prova);
+        return ResponseEntity.ok(prova);
     }
 
 }

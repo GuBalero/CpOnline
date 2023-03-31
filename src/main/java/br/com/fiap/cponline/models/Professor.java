@@ -4,19 +4,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Professor {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
     private String nome;
+    @Email
     private String email;
+    @Pattern(regexp = "[0-9]*8")
     private String senha;
+    @NotNull
     private String instituicao;
-    
-    public Professor(){
+
+    public Professor() {
 
     }
 
@@ -73,6 +80,5 @@ public class Professor {
         return "Professor [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", instituicao="
                 + instituicao + "]";
     }
-    
-    
+
 }
