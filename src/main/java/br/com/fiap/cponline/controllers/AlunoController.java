@@ -62,7 +62,7 @@ public class AlunoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Aluno> update(@PathVariable int id, @RequestBody Aluno aluno) {
+    public ResponseEntity<Aluno> update(@PathVariable int id, @RequestBody @Valid Aluno aluno) {
         log.info("Atualizando Aluno" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));

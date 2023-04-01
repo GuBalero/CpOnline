@@ -63,7 +63,7 @@ public class ProvaController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Prova> update(@PathVariable int id, @RequestBody Prova prova) {
+    public ResponseEntity<Prova> update(@PathVariable int id, @RequestBody @Valid Prova prova) {
         log.info("Atualizando Prova" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.fiap.cponline.exceptions.RestNotFoundException;
 import br.com.fiap.cponline.models.Questao;
 import br.com.fiap.cponline.repository.QuestaoRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/questao/")
@@ -28,7 +29,7 @@ public class QuestaoController {
     QuestaoRepository repository;
 
     @PostMapping
-    public ResponseEntity<Questao> create(@RequestBody Questao questao) {
+    public ResponseEntity<Questao> create(@RequestBody @Valid Questao questao) {
         log.info("Cadastrar Questão" + questao);
 
         int idCadastrado = repository.save(questao).getId();
@@ -61,7 +62,7 @@ public class QuestaoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Questao> update(@PathVariable int id, @RequestBody Questao questao) {
+    public ResponseEntity<Questao> update(@PathVariable int id, @RequestBody @Valid Questao questao) {
         log.info("Atualizar questão" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Questão não encontrado"));
