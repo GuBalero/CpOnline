@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Prova {
@@ -13,9 +16,17 @@ public class Prova {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @NotBlank
+    @Size(min = 15, max = 2000)
     private String descricao;
+    @NotNull
+    @NotBlank
+    @Size(min = 6, max = 500)
     private String urlAcesso;
+    @NotNull
     private LocalDate data;
+
     private boolean ativo;
 
     public Prova() {

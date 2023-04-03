@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.fiap.cponline.exceptions.RestNotFoundException;
 import br.com.fiap.cponline.models.Aluno;
 import br.com.fiap.cponline.repository.AlunoRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/aluno/")
@@ -27,7 +29,7 @@ public class AlunoController {
     AlunoRepository repository;
 
     @PostMapping
-    public ResponseEntity<Aluno> create(@RequestBody Aluno aluno) {
+    public ResponseEntity<Aluno> create(@RequestBody @Valid Aluno aluno) {
         log.info("Cadastrando o Aluno" + aluno);
 
         int idCadastrado = repository.save(aluno).getId();
@@ -41,39 +43,33 @@ public class AlunoController {
     public ResponseEntity<Aluno> show(@PathVariable int id) {
         log.info("buscar o Aluno" + id);
 
-        var busca = repository.findById(id);
+        var aluno = repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        return ResponseEntity.ok(busca.get());
+        return ResponseEntity.ok(aluno);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Aluno> destroy(@PathVariable int id) {
         log.info("buscar o Aluno" + id);
 
-        var busca = repository.findById(id);
+        var aluno = repository.findById(id)
+                .orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-
-        repository.delete(busca.get());
+        repository.delete(aluno);
 
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Aluno> update(@PathVariable int id, @RequestBody Aluno aluno) {
+    public ResponseEntity<Aluno> update(@PathVariable int id, @RequestBody @Valid Aluno aluno) {
         log.info("Atualizando Aluno" + id);
-        var busca = repository.findById(id);
 
-        if (busca.isEmpty())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        repository.findById(id).orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));
 
         aluno.setId(id);
         repository.save(aluno);
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(aluno);
+        return ResponseEntity.ok(aluno);
     }
 }
