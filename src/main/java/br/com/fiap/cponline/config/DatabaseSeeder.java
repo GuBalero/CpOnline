@@ -17,18 +17,12 @@ public class DatabaseSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         questaoRepository.saveAll(List.of(
-            
-    new Questao(1,new String("Qual o valor da Soma de 2 + 2"),new String("2"),new String("4"),
-    new String("5"),new String("6"),new String("7"),new String("2"),
-    
-    new Questao(2,new String("Qual o valor da Soma de 2 + 5"),new String("2"),new String("4"),
-    new String("5"),new String("6"),new String("7"),new String("7"),
-   
-    new Questao(3,new String("Qual o valor da Soma de 3 + 3"),new String("2"),new String("4"),
-    new String("5"),new String("6"),new String("7"),new String("6")
-    ));
 
-    
+                new Questao("Qual o valor da Soma de 2 + 2", "2", "4", "6", "8", "10", "4"),
+
+                new Questao("Qual o valor da Soma de 4 + 4", "2", "4", "6", "8", "10", "8"),
+
+                new Questao("Qual o valor da Soma de 3 + 3", "2", "4", "6", "8", "10", "6")));
     }
 
 }
