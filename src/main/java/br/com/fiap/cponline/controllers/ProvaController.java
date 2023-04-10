@@ -1,5 +1,7 @@
 package br.com.fiap.cponline.controllers;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ public class ProvaController {
 
     @Autowired
     ProvaRepository repository;
+
+    @GetMapping
+    public List<Prova> index() {
+        return repository.findAll();
+
+    }
 
     @PostMapping
     public ResponseEntity<Prova> create(@RequestBody @Valid Prova prova) {
