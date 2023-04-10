@@ -6,10 +6,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 @Entity
 public class Prova {
 
@@ -26,60 +31,10 @@ public class Prova {
     private String urlAcesso;
     @NotNull
     private LocalDate data;
-
     private boolean ativo;
 
-    public Prova() {
-
-    }
-
-    public Prova(int id, String descricao, String urlAcesso, LocalDate data, boolean ativo) {
-        this.id = id;
-        this.descricao = descricao;
-        this.urlAcesso = urlAcesso;
-        this.data = data;
-        this.ativo = ativo;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public String getUrlAcesso() {
-        return urlAcesso;
-    }
-
-    public void setUrlAcesso(String urlAcesso) {
-        this.urlAcesso = urlAcesso;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
+    @ManyToOne
+    private Questao questao;
 
     @Override
     public String toString() {

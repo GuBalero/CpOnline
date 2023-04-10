@@ -1,5 +1,7 @@
 package br.com.fiap.cponline.controllers;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ public class QuestaoController {
     @Autowired
     QuestaoRepository repository;
 
+    @GetMapping
+    public List<Questao> index() {
+        return repository.findAll();
+
+    }
+
     @PostMapping
     public ResponseEntity<Questao> create(@RequestBody @Valid Questao questao) {
         log.info("Cadastrar Questão" + questao);
@@ -51,7 +59,7 @@ public class QuestaoController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Questao> destroy(@PathVariable int id) {
-        log.info("buscar questão" + id);
+        log.info("Apagar questão" + id);
 
         var questao = repository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("Questão não encontrado"));
