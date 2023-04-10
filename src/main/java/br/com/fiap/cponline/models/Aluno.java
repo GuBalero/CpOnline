@@ -15,9 +15,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Aluno {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @NotNull
     @NotBlank
     private String nome;

@@ -59,7 +59,7 @@ public class AlunoController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Aluno> destroy(@PathVariable int id) {
-        log.info("Apagar o Aluno" + id);
+        log.info(" Apagar Aluno" + id);
 
         var aluno = repository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));
