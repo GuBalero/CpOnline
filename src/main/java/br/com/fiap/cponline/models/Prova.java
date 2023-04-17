@@ -25,16 +25,21 @@ public class Prova {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NotNull
     @NotBlank
-    @Size(min = 15, max = 2000)
+    @Size(min = 5, max = 2000)
     private String descricao;
+    
     @NotNull
     @NotBlank
     @Size(min = 6, max = 500)
     private String urlAcesso;
+
     @NotNull
     private LocalDate data;
+
+    @NotNull
     private boolean ativo;
 
     @ManyToOne

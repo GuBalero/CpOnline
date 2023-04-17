@@ -12,6 +12,4 @@ public interface QuestaoRepository extends JpaRepository<Questao, Integer> {
 
     Page<Questao> findByEnunciadoContaining(String enunciado, Pageable pageable);
 
-    void saveAll(List<Object> of);
-
 }
