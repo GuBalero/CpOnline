@@ -2,7 +2,6 @@ package br.com.fiap.cponline.models;
 
 import java.time.LocalDate;
 
-import br.com.fiap.cponline.models.Aluno.AlunoBuilder;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,7 +43,7 @@ public class Prova {
     @Override
     public String toString() {
         return "Prova [id=" + id + ", descricao=" + descricao + ", urlAcesso=" + urlAcesso + ", data=" + data
-                + ", ativo=" + ativo + "]";
+                + ", ativo=" + ativo + "";
     }
 
 }
