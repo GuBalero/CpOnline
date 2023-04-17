@@ -10,27 +10,36 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 public class Prova {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @NotNull
     @NotBlank
-    @Size(min = 15, max = 2000)
+    @Size(min = 5, max = 2000)
     private String descricao;
+    
     @NotNull
     @NotBlank
     @Size(min = 6, max = 500)
     private String urlAcesso;
+
     @NotNull
     private LocalDate data;
+
+    @NotNull
     private boolean ativo;
 
     @ManyToOne
@@ -39,7 +48,7 @@ public class Prova {
     @Override
     public String toString() {
         return "Prova [id=" + id + ", descricao=" + descricao + ", urlAcesso=" + urlAcesso + ", data=" + data
-                + ", ativo=" + ativo + "]";
+                + ", ativo=" + ativo + "";
     }
 
 }
