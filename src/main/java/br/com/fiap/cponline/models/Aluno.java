@@ -8,12 +8,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Aluno {
 
     @Id
@@ -35,7 +39,8 @@ public class Aluno {
     @Override
     public String toString() {
         return "Aluno [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", instituicao="
-                + instituicao + "]";
+                + instituicao + "";
+
     }
 
 }

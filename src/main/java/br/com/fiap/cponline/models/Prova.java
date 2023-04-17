@@ -2,6 +2,7 @@ package br.com.fiap.cponline.models;
 
 import java.time.LocalDate;
 
+import br.com.fiap.cponline.models.Aluno.AlunoBuilder;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,12 +11,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 public class Prova {
 
     @Id
