@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,35 +35,40 @@ public class QuestaoController {
     @Autowired
     QuestaoRepository repository;
 
-    @GetMapping
-    public Page<Questao> index(@RequestParam(required = false) String enunciado,
-            @PageableDefault(size = 2) Pageable pageable) {
-        if (enunciado == null)
-            return repository.findAll(pageable);
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
 
-        return repository.findByEnunciadoContaining(enunciado, pageable);
+    @GetMapping
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String enunciado,
+            @PageableDefault(size = 2) Pageable pageable) {
+        Page<Questao> questao = (enunciado == null) ? repository.findAll(pageable)
+                : repository.findByEnunciadoContaining(enunciado, pageable);
+
+        return assembler.toModel(questao.map(Questao::toEntityModel));
 
     }
 
     @PostMapping
-    public ResponseEntity<Questao> create(@RequestBody @Valid Questao questao) {
+    public ResponseEntity<Object> create(@RequestBody @Valid Questao questao) {
         log.info("Cadastrar Questão" + questao);
 
         int idCadastrado = repository.save(questao).getId();
 
         questao.setId(idCadastrado);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(questao);
+        return ResponseEntity
+                .created(questao.toEntityModel().getRequiredLink("self").toUri())
+                .body(questao.toEntityModel());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Questao> show(@PathVariable int id) {
+    public EntityModel<Questao> show(@PathVariable int id) {
         log.info("buscar questão" + id);
 
         var questao = repository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));
 
-        return ResponseEntity.ok(questao);
+        return questao.toEntityModel();
     }
 
     @DeleteMapping("{id}")
@@ -76,7 +84,7 @@ public class QuestaoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Questao> update(@PathVariable int id, @RequestBody @Valid Questao questao) {
+    public EntityModel<Questao> update(@PathVariable int id, @RequestBody @Valid Questao questao) {
         log.info("Atualizar questão" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Questão não encontrado"));
@@ -84,7 +92,7 @@ public class QuestaoController {
         questao.setId(id);
         repository.save(questao);
 
-        return ResponseEntity.ok(questao);
+        return (questao.toEntityModel());
     }
 
 }

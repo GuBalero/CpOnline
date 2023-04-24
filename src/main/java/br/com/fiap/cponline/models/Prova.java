@@ -2,6 +2,11 @@ package br.com.fiap.cponline.models;
 
 import java.time.LocalDate;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+
+import br.com.fiap.cponline.controllers.ProvaController;
+import br.com.fiap.cponline.controllers.QuestaoController;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +19,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @Data
 @NoArgsConstructor
@@ -30,7 +36,7 @@ public class Prova {
     @NotBlank
     @Size(min = 5, max = 2000)
     private String descricao;
-    
+
     @NotNull
     @NotBlank
     @Size(min = 6, max = 500)
@@ -44,6 +50,16 @@ public class Prova {
 
     @ManyToOne
     private Questao questao;
+
+    public EntityModel<Prova> toEntityModel() {
+        return EntityModel.of(
+            this,
+            linkTo(methodOn(ProvaController.class).show(id)).withSelfRel(),
+            linkTo(methodOn(ProvaController.class).destroy(id)).withRel("delete"),
+            linkTo(methodOn(ProvaController.class).index(null, Pageable.unpaged())).withRel("all"),
+            linkTo(methodOn(QuestaoController.class).show(questao.getId())).withRel("questao")
+        );
+    }
 
     @Override
     public String toString() {
