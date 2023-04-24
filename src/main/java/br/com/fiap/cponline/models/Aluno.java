@@ -4,7 +4,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 
 import br.com.fiap.cponline.controllers.AlunoController;
-import br.com.fiap.cponline.controllers.ProfessorController;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,10 +43,11 @@ public class Aluno {
 
     public EntityModel<Aluno> toEntityModel() {
         return EntityModel.of(
-                this,
-                linkTo(methodOn(AlunoController.class).show(id)).withSelfRel(),
-                linkTo(methodOn(AlunoController.class).destroy(id)).withRel("delete"),
-                linkTo(methodOn(AlunoController.class).index(null, Pageable.unpaged()).withRel("all")));
+            this,
+            linkTo(methodOn(AlunoController.class).show(id)).withSelfRel(),
+            linkTo(methodOn(AlunoController.class).destroy(id)).withRel("delete"),
+            linkTo(methodOn(AlunoController.class).index(null, Pageable.unpaged())).withRel("all")
+        );
 
     }
 

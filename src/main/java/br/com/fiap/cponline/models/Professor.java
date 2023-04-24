@@ -2,7 +2,6 @@ package br.com.fiap.cponline.models;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.server.LinkBuilder;
 
 import br.com.fiap.cponline.controllers.ProfessorController;
 import jakarta.persistence.Entity;
@@ -43,10 +42,11 @@ public class Professor {
 
     public EntityModel<Professor> toEntityModel() {
         return EntityModel.of(
-                this,
-                linkTo(methodOn(ProfessorController.class).show(id)).withSelfRel(),
-                linkTo(methodOn(ProfessorController.class).destroy(id)).withRel("delete"),
-                linkTo(methodOn(ProfessorController.class).index(null, Pageable.unpaged()).withRel("all")));
+            this,
+            linkTo(methodOn(ProfessorController.class).show(id)).withSelfRel(),
+            linkTo(methodOn(ProfessorController.class).destroy(id)).withRel("delete"),
+            linkTo(methodOn(ProfessorController.class).index(null, Pageable.unpaged())).withRel("all")
+        );
 
     }
 

@@ -3,7 +3,6 @@ package br.com.fiap.cponline.models;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 
-import br.com.fiap.cponline.controllers.ProfessorController;
 import br.com.fiap.cponline.controllers.QuestaoController;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -62,11 +61,11 @@ public class Questao {
 
         public EntityModel<Questao> toEntityModel() {
                 return EntityModel.of(
-                                this,
-                                linkTo(methodOn(QuestaoController.class).show(id)).withSelfRel(),
-                                linkTo(methodOn(QuestaoController.class).destroy(id)).withRel("delete"),
-                                linkTo(methodOn(QuestaoController.class).index(null, Pageable.unpaged())
-                                                .withRel("all")));
+                        this,
+                        linkTo(methodOn(QuestaoController.class).show(id)).withSelfRel(),
+                        linkTo(methodOn(QuestaoController.class).destroy(id)).withRel("delete"),
+                        linkTo(methodOn(QuestaoController.class).index(null, Pageable.unpaged())).withRel("all")
+                );
 
         }
 

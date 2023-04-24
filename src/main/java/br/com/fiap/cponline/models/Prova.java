@@ -1,14 +1,10 @@
 package br.com.fiap.cponline.models;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 import java.time.LocalDate;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 
-import br.com.fiap.cponline.controllers.ProfessorController;
 import br.com.fiap.cponline.controllers.ProvaController;
 import br.com.fiap.cponline.controllers.QuestaoController;
 import jakarta.persistence.Entity;
@@ -57,11 +53,12 @@ public class Prova {
 
     public EntityModel<Prova> toEntityModel() {
         return EntityModel.of(
-                this,
-                linkTo(methodOn(ProvaController.class).show(id)).withSelfRel(),
-                linkTo(methodOn(ProvaController.class).destroy(id)).withRel("delete"),
-                linkTo(methodOn(ProvaController.class).index(null, Pageable.unpaged()).withRel("all")));
-        linkTo(methodOn(QuestaoController.class).show(questao.getEnunciado().getId())).withRel("questao");
+            this,
+            linkTo(methodOn(ProvaController.class).show(id)).withSelfRel(),
+            linkTo(methodOn(ProvaController.class).destroy(id)).withRel("delete"),
+            linkTo(methodOn(ProvaController.class).index(null, Pageable.unpaged())).withRel("all"),
+            linkTo(methodOn(QuestaoController.class).show(questao.getId())).withRel("questao")
+        );
     }
 
     @Override
