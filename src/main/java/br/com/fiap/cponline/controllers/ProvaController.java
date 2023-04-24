@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,34 +36,41 @@ public class ProvaController {
     @Autowired
     ProvaRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
-    public Page<Prova> index(@RequestParam(required = false) String descricao,
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String descricao,
             @PageableDefault(size = 2) Pageable pageable) {
 
-        if (descricao == null)
-            return repository.findAll(pageable);
-        return repository.findByDescricaoContaining(descricao, pageable);
+        Page<Prova> prova = (descricao == null) ? repository.findAll(pageable)
+                : repository.findByDescricaoContaining(descricao, pageable);
+
+        return assembler.toModel(prova.map(Prova::toEntityModel));
+
     }
 
     @PostMapping
-    public ResponseEntity<Prova> create(@RequestBody @Valid Prova prova) {
+    public ResponseEntity<EntityModel<Prova>> create(@RequestBody @Valid Prova prova) {
         log.info("Cadastrando a Prova" + prova);
 
         int idCadastrado = repository.save(prova).getId();
 
         prova.setId(idCadastrado);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(prova);
+        return ResponseEntity
+                .created(prova.toEntityModel().getRequiredLink("self").toUri())
+                .body(prova.toEntityModel());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Prova> show(@PathVariable int id) {
+    public EntityModel<Prova> show(@PathVariable int id) {
         log.info("buscar a Prova" + id);
 
         var prova = repository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));
 
-        return ResponseEntity.ok(prova);
+        return prova.toEntityModel();
     }
 
     @DeleteMapping("{id}")
@@ -76,7 +86,7 @@ public class ProvaController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Prova> update(@PathVariable int id, @RequestBody @Valid Prova prova) {
+    public EntityModel<Prova> update(@PathVariable int id, @RequestBody @Valid Prova prova) {
         log.info("Atualizando Prova" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Prova não encontrado"));
@@ -84,7 +94,7 @@ public class ProvaController {
         prova.setId(id);
         repository.save(prova);
 
-        return ResponseEntity.ok(prova);
+        return prova.toEntityModel();
     }
 
 }

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,34 +35,40 @@ public class AlunoController {
     @Autowired
     AlunoRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
-    public Page<Aluno> index(@RequestParam(required = false) String nome,
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String nome,
             @PageableDefault(size = 2) Pageable pageable) {
-        if (nome == null)
-            return repository.findAll(pageable);
-        return repository.findByNomeContaining(nome, pageable);
+        Page<Aluno> aluno = (nome == null) ? repository.findAll(pageable)
+                : repository.findByNomeContaining(nome, pageable);
+
+        return assembler.toModel(aluno.map(Aluno::toEntityModel));
 
     }
 
     @PostMapping
-    public ResponseEntity<Aluno> create(@RequestBody @Valid Aluno aluno) {
+    public ResponseEntity<Object> create(@RequestBody @Valid Aluno aluno) {
         log.info("Cadastrando o Aluno" + aluno);
 
         int idCadastrado = repository.save(aluno).getId();
 
         aluno.setId(idCadastrado);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(aluno);
+        return ResponseEntity
+                .created(aluno.toEntityModel().getRequiredLink("self").toUri())
+                .body(aluno.toEntityModel());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Aluno> show(@PathVariable int id) {
+    public EntityModel<Aluno> show(@PathVariable int id) {
         log.info("buscar o Aluno" + id);
 
         var aluno = repository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));
 
-        return ResponseEntity.ok(aluno);
+        return aluno.toEntityModel();
     }
 
     @DeleteMapping("{id}")
@@ -75,7 +84,7 @@ public class AlunoController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Aluno> update(@PathVariable int id, @RequestBody @Valid Aluno aluno) {
+    public EntityModel<Aluno> update(@PathVariable int id, @RequestBody @Valid Aluno aluno) {
         log.info("Atualizando Aluno" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Aluno não encontrado"));
@@ -83,6 +92,6 @@ public class AlunoController {
         aluno.setId(id);
         repository.save(aluno);
 
-        return ResponseEntity.ok(aluno);
+        return (aluno.toEntityModel());
     }
 }

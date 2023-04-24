@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,17 +35,21 @@ public class ProfessorController {
     @Autowired
     ProfessorRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<Object> assembler;
+
     @GetMapping
-    public Page<Professor> index(@RequestParam(required = false) String nome,
+    public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String nome,
             @PageableDefault(size = 2) Pageable pageable) {
-        if (nome == null)
-            return repository.findAll(pageable);
-        return repository.findByNomeContaining(nome, pageable);
+        Page<Professor> professor = (nome == null) ? repository.findAll(pageable)
+                : repository.findByNomeContaining(nome, pageable);
+
+        return assembler.toModel(professor.map(Professor::toEntityModel));
 
     }
 
     @PostMapping
-    public ResponseEntity<Professor> create(@RequestBody @Valid Professor professor) {
+    public ResponseEntity<Object> create(@RequestBody @Valid Professor professor) {
 
         log.info("Cadastrando o Professor" + professor);
 
@@ -50,17 +57,19 @@ public class ProfessorController {
 
         professor.setId(idCadastrado);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(professor);
+        return ResponseEntity
+                .created(professor.toEntityModel().getRequiredLink("self").toUri())
+                .body(professor.toEntityModel());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Professor> show(@PathVariable int id) {
+    public EntityModel<Professor> show(@PathVariable int id) {
         log.info("buscar o Professor" + id);
 
         var professor = repository.findById(id)
                 .orElseThrow(() -> new RestNotFoundException("Professor não encontrado"));
 
-        return ResponseEntity.ok(professor);
+        return professor.toEntityModel();
     }
 
     @DeleteMapping("{id}")
@@ -76,7 +85,7 @@ public class ProfessorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Professor> update(@PathVariable int id, @RequestBody @Valid Professor professor) {
+    public EntityModel<Professor> update(@PathVariable int id, @RequestBody @Valid Professor professor) {
         log.info("Atualizando Professor" + id);
 
         repository.findById(id).orElseThrow(() -> new RestNotFoundException("Professor não encontrado"));
@@ -84,6 +93,6 @@ public class ProfessorController {
         professor.setId(id);
         repository.save(professor);
 
-        return ResponseEntity.ok(professor);
+        return (professor.toEntityModel());
     }
 }
