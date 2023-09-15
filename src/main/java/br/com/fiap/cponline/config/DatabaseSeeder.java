@@ -17,6 +17,7 @@ import br.com.fiap.cponline.repository.ProvaRepository;
 import br.com.fiap.cponline.repository.QuestaoRepository;
 
 @Configuration
+@Profile("dev")
 public class DatabaseSeeder implements CommandLineRunner {
 
         @Autowired
