@@ -40,7 +40,7 @@ public class AlunoController {
 
     @GetMapping
     public PagedModel<EntityModel<Object>> index(@RequestParam(required = false) String nome,
-            @PageableDefault(size = 2) Pageable pageable) {
+            @PageableDefault(size = 5) Pageable pageable) {
         Page<Aluno> aluno = (nome == null) ? repository.findAll(pageable)
                 : repository.findByNomeContaining(nome, pageable);
 

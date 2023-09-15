@@ -34,9 +34,10 @@ public class Aluno {
     @Email
     @NotBlank
     private String email;
-    @Pattern(regexp = "[0-9]*8")
+
     @NotBlank
     private String senha;
+
     @NotNull
     @NotBlank
     private String instituicao;
